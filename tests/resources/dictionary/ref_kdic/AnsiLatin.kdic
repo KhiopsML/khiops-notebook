@@ -1,8 +1,0 @@
-#Khiops 10.0.0.3i
-
-Dictionary	AnsiLatin
-{
-	Categorical	VarAscii_a		;	
-	Categorical	`VarAnsi_é`		;	
-	Categorical	`VarLatin_é`		;	
-};

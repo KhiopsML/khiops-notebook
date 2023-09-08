@@ -1,8 +1,0 @@
-#Khiops 10.0.0.3i
-
-Dictionary	LatinGreek
-{
-	Categorical	VarAscii_a		;	
-	Categorical	`VarLatin_é`		;	
-	Categorical	`VarGreek_θ`		;	
-};

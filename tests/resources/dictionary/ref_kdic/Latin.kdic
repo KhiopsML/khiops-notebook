@@ -1,7 +1,0 @@
-#Khiops 10.0.0.3i
-
-Dictionary	Latin
-{
-	Categorical	VarAscii_a		;	
-	Categorical	`VarLatin_é`		;	
-};
