@@ -1,0 +1,40 @@
+// Scenario for task deploy_model
+// Dictionary file settings
+ClassManagement.OpenFile
+ClassFileName SpliceJunction.kdic
+OK
+
+// Deploy settings
+LearningTools.TransferDatabase
+ClassName SpliceJunction
+
+// Input database settings
+SourceDatabase.DatabaseFiles.List.Key SpliceJunction
+SourceDatabase.DatabaseFiles.DataTableName SpliceJunction.csv
+SourceDatabase.DatabaseFiles.List.Key SpliceJunction`DNA
+SourceDatabase.DatabaseFiles.DataTableName SpliceJunctionDNABidon.csv
+SourceDatabase.HeaderLineUsed true
+SourceDatabase.FieldSeparator 
+SourceDatabase.DatabaseFormatDetector.DetectFileFormat
+SourceDatabase.SampleNumberPercentage 100.0
+SourceDatabase.SamplingMode Include sample
+SourceDatabase.SelectionAttribute 
+SourceDatabase.SelectionValue 
+
+// Output database settings
+TargetDatabase.DatabaseFiles.List.Key SpliceJunction
+TargetDatabase.DatabaseFiles.DataTableName .\SpliceJunctionDeployed.csv
+TargetDatabase.DatabaseFiles.List.Key SpliceJunction`DNA
+TargetDatabase.DatabaseFiles.DataTableName .\TransferSpliceJunctionDNABidon.csv
+TargetDatabase.HeaderLineUsed true
+TargetDatabase.FieldSeparator 
+
+// Transfer
+TransferDatabase
+Exit
+
+// End of scenario for task deploy_model
+
+// Exit Khiops
+ClassManagement.Quit
+OK

@@ -1,0 +1,29 @@
+// Scenario for task evaluate_predictor
+// Dictionary file settings
+ClassManagement.OpenFile
+ClassFileName ModelingAdult.kdic
+OK
+
+// Evaluate predictor settings
+LearningTools.EvaluatePredictors
+MainTargetModality 
+EvaluationDatabase.DatabaseFiles.List.Key Adult
+EvaluationDatabase.DatabaseFiles.DataTableName Adult.csv
+EvaluationDatabase.HeaderLineUsed true
+EvaluationDatabase.FieldSeparator 
+EvaluationDatabase.DatabaseFormatDetector.DetectFileFormat
+EvaluationDatabase.SampleNumberPercentage 100.0
+EvaluationDatabase.SamplingMode Include sample
+EvaluationDatabase.SelectionAttribute 
+EvaluationDatabase.SelectionValue 
+EvaluationFileName .\AdultResults\EvaluationReport.xls
+
+// Evaluate predictor
+EvaluatePredictors
+Exit
+
+// End of scenario for task evaluate_predictor
+
+// Exit Khiops
+ClassManagement.Quit
+OK

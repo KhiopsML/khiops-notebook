@@ -1,0 +1,31 @@
+// Scenario for task evaluate_predictor
+// Dictionary file settings
+ClassManagement.OpenFile
+ClassFileName ModelingSpliceJunction.kdic
+OK
+
+// Evaluate predictor settings
+LearningTools.EvaluatePredictors
+MainTargetModality 
+EvaluationDatabase.DatabaseFiles.List.Key SpliceJunction
+EvaluationDatabase.DatabaseFiles.DataTableName SpliceJunction.csv
+EvaluationDatabase.DatabaseFiles.List.Key SpliceJunction`DNA
+EvaluationDatabase.DatabaseFiles.DataTableName SpliceJunctionDNABidon.csv
+EvaluationDatabase.HeaderLineUsed true
+EvaluationDatabase.FieldSeparator 
+EvaluationDatabase.DatabaseFormatDetector.DetectFileFormat
+EvaluationDatabase.SampleNumberPercentage 100.0
+EvaluationDatabase.SamplingMode Include sample
+EvaluationDatabase.SelectionAttribute 
+EvaluationDatabase.SelectionValue 
+EvaluationFileName .\SpliceJunctionResults\EvaluationReport.xls
+
+// Evaluate predictor
+EvaluatePredictors
+Exit
+
+// End of scenario for task evaluate_predictor
+
+// Exit Khiops
+ClassManagement.Quit
+OK

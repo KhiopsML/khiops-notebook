@@ -1,0 +1,19 @@
+// Scenario for task build_deployed_dictionary
+// Dictionary file and class settings
+ClassManagement.OpenFile
+ClassFileName Adult.kdic
+OK
+
+// Transfer settings
+LearningTools.TransferDatabase
+ClassName Adult
+BuildTransferredClass
+ClassFileName AdultDeployed.kdic
+OK
+Exit
+
+// End of scenario for task build_deployed_dictionary
+
+// Exit Khiops
+ClassManagement.Quit
+OK

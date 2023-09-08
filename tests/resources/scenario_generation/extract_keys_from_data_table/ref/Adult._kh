@@ -1,0 +1,24 @@
+// Scenario for task extract_keys_from_data_table
+// Dictionary file
+ClassManagement.OpenFile
+ClassFileName Adult.kdic
+OK
+
+// Extract keys settings
+LearningTools.ExtractKeysFromDataTable
+ClassName Adult
+SourceDataTable.DatabaseName Adult.csv
+SourceDataTable.HeaderLineUsed true
+SourceDataTable.FieldSeparator 
+SourceDataTable.DatabaseFormatDetector.DetectFileFormat
+TargetDataTable.DatabaseName .\AdultKeys.csv
+TargetDataTable.HeaderLineUsed true
+TargetDataTable.FieldSeparator 
+ExtractKeysFromDataTable
+Exit
+
+// End of scenario for task extract_keys_from_data_table
+
+// Exit Khiops
+ClassManagement.Quit
+OK

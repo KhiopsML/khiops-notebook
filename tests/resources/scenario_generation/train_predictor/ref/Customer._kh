@@ -1,0 +1,78 @@
+// Scenario for task train_predictor
+// Dictionary file and class settings
+ClassManagement.OpenFile
+ClassFileName Customer.kdic
+OK
+ClassManagement.ClassName Customer
+
+// Train/test database settings
+TrainDatabase.DatabaseFiles.List.Key Customer
+TrainDatabase.DatabaseFiles.DataTableName Customer.csv
+TrainDatabase.DatabaseFiles.List.Key Customer`Services
+TrainDatabase.DatabaseFiles.DataTableName ServicesBidon.csv
+TrainDatabase.DatabaseFiles.List.Key Customer`Services`Usages
+TrainDatabase.DatabaseFiles.DataTableName UsagesBidon.csv
+TrainDatabase.DatabaseFiles.List.Key Customer`Address
+TrainDatabase.DatabaseFiles.DataTableName AddressBidon.csv
+TrainDatabase.DatabaseFiles.List.Key City
+TrainDatabase.DatabaseFiles.DataTableName CityBidon.csv
+TrainDatabase.DatabaseFiles.List.Key Country
+TrainDatabase.DatabaseFiles.DataTableName CountryBidon.csv
+TrainDatabase.DatabaseFiles.List.Key Product
+TrainDatabase.DatabaseFiles.DataTableName ProductBidon.csv
+TrainDatabase.HeaderLineUsed true
+TrainDatabase.FieldSeparator 
+TrainDatabase.DatabaseFormatDetector.DetectFileFormat
+TrainDatabase.SampleNumberPercentage 70.0
+TrainDatabase.SamplingMode Include sample
+TrainDatabase.SelectionAttribute 
+TrainDatabase.SelectionValue 
+TrainDatabase.TestDatabaseSpecificationMode Complementary
+
+// Target variable
+AnalysisSpec.TargetAttributeName 
+AnalysisSpec.MainTargetModality 
+
+// Predictors to train
+AnalysisSpec.PredictorsSpec.SelectiveNaiveBayesPredictor true
+AnalysisSpec.PredictorsSpec.AdvancedSpec.UnivariatePredictorNumber 0
+
+// Selective Naive Bayes settings
+AnalysisSpec.PredictorsSpec.AdvancedSpec.InspectSelectiveNaiveBayesParameters
+TrainParameters.MaxEvaluatedAttributeNumber 0
+SelectionParameters.MaxSelectedAttributeNumber 0
+Exit
+
+// Feature engineering
+AnalysisSpec.PredictorsSpec.ConstructionSpec.MaxTreeNumber 10
+AnalysisSpec.PredictorsSpec.ConstructionSpec.MaxAttributePairNumber 0
+AnalysisSpec.PredictorsSpec.AdvancedSpec.InspectAttributePairsParameters
+AllAttributePairs true
+Exit
+AnalysisSpec.PredictorsSpec.ConstructionSpec.MaxConstructedAttributeNumber 100
+AnalysisSpec.PredictorsSpec.AdvancedSpec.InspectConstructionDomain
+Exit
+
+// Data preparation (discretization & grouping) settings
+AnalysisSpec.PreprocessingSpec.TargetGrouped false
+AnalysisSpec.PreprocessingSpec.DiscretizerSpec.SupervisedMethodName EqualWidth
+AnalysisSpec.PreprocessingSpec.DiscretizerSpec.UnsupervisedMethodName EqualWidth
+AnalysisSpec.PreprocessingSpec.DiscretizerSpec.MinIntervalFrequency 0
+AnalysisSpec.PreprocessingSpec.DiscretizerSpec.MaxIntervalNumber 0
+AnalysisSpec.PreprocessingSpec.GrouperSpec.SupervisedMethodName BasicGrouping
+AnalysisSpec.PreprocessingSpec.GrouperSpec.UnsupervisedMethodName BasicGrouping
+AnalysisSpec.PreprocessingSpec.GrouperSpec.MinGroupFrequency 0
+AnalysisSpec.PreprocessingSpec.GrouperSpec.MaxGroupNumber 0
+
+// Output settings
+AnalysisResults.ResultFilesDirectory .\CustomerResults
+AnalysisResults.ResultFilesPrefix 
+
+// Build model
+ComputeStats
+
+// End of scenario for task train_predictor
+
+// Exit Khiops
+ClassManagement.Quit
+OK
