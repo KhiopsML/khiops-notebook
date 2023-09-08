@@ -1,7 +1,7 @@
 name: Build, test, and publish Docker Images
 
 env:
-  OWNER: ${{ github.repository_owner }}
+  OWNER: khiopsml
   IMAGE_NAME: ${{ github.event.repository.name }}
 
 # For more details on events that trigger workflows see:
