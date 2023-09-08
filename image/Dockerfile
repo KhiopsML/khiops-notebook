@@ -1,9 +1,17 @@
-FROM jupyter/scipy-notebook
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG OWNER=jupyter
+ARG BASE_CONTAINER=$OWNER/scipy-notebook
+FROM $BASE_CONTAINER
 
-# Add RUN statements to install packages as the $NB_USER defined in the base images.
+LABEL maintainer="Khiops <khiops.team@orange.com>"
 
-# Add a "USER root" statement followed by RUN statements to install system packages using apt-get,
-# change file permissions, etc.
+# Fix: https://github.com/hadolint/hadolint/wiki/DL4006
+# Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# If you do switch to root, always be sure to add a "USER $NB_USER" command at the end of the
-# file to ensure the image runs as a unprivileged user by default.
+# Installer Khiops avec conda
+RUN conda install --quiet --yes -c khiops khiops && \
+    conda clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
