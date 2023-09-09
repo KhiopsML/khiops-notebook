@@ -24,6 +24,7 @@ on:
       - "image/**"
       - "tests/**"
       - "requirements-dev.txt"
+      - "Dockerfile"
   workflow_dispatch:
 
 # https://docs.github.com/en/actions/using-jobs/using-concurrency
@@ -59,7 +60,7 @@ jobs:
         id: get_sha
 
       - name: Build image 🛠
-        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} image/
+        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} 
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
