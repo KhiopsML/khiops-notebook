@@ -1,5 +1,5 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
+# Copyright (c) Orange S.A.
+# Distributed under the terms of the BSD-3-Clause-Clear License.
 
 # ARGs to set default values
 ARG OWNER=jupyter
@@ -8,7 +8,7 @@ ARG BASE_CONTAINER=$OWNER/scipy-notebook
 # Base image (platform is set to amd64 since Khiops is not built yet for ARM)
 FROM --platform=linux/amd64 $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 
 # Fixes for some issues faced during image creation
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
