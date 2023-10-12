@@ -1,35 +1,37 @@
-# Use the base image specifically for the amd64 architecture until the Khiops package becomes available for arm64.
-FROM --platform=linux/amd64 jupyter/base-notebook
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
 
-# Name of the environment and Python version
-ARG env_name=Khiops
-ARG py_ver=3.10
+# ARGs to set default values
+ARG OWNER=jupyter
+ARG BASE_CONTAINER=$OWNER/scipy-notebook
 
-# Create the environment using mamba
-RUN mamba create --yes -p "${CONDA_DIR}/envs/${env_name}" \
-    python=${py_ver} \
-    ipykernel \
-    jupyterlab && \
-    mamba clean --all -f -y
+# Base image (platform is set to amd64 since Khiops is not built yet for ARM)
+FROM --platform=linux/amd64 $BASE_CONTAINER
 
-# Create Python kernel and link it to Jupyter
-RUN "${CONDA_DIR}/envs/${env_name}/bin/python" -m ipykernel install --user --name="${env_name}" && \
+LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+
+# Fixes for some issues faced during image creation
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Switch to ROOT for installation
+USER root
+ARG KHIOPS_VERSION=10.1.1
+ARG KHIOPS_PYTHON_VERSION=10.2.0a4
+
+# Install Khiops using apt-get
+RUN apt-get update && \
+    apt-get install -y wget && \
+    CODENAME=$(sed -rn 's|^deb\s+\S+\s+(\w+)\s+(\w+\s+)?main.*$|\1|p' /etc/apt/sources.list) && \
+    wget "https://github.com/KhiopsML/khiops/releases/download/v${KHIOPS_VERSION}/khiops-core_${KHIOPS_VERSION}-0+${CODENAME}_amd64.deb" && \
+    dpkg -i "khiops-core_${KHIOPS_VERSION}-0+${CODENAME}_amd64.deb" || apt-get -f -y install && \
+    rm "khiops-core_${KHIOPS_VERSION}-0+${CODENAME}_amd64.deb" && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Switch back to the original user
+USER $NB_UID
+
+# Install Khiops-python using pip
+RUN pip install --no-cache-dir 'khiops @ git+https://github.com/khiopsml/khiops-python@v${KHIOPS_PYTHON_VERSION}' && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
-
-# Install Khiops package using mamba
-RUN mamba install --quiet --yes --name ${env_name} -c khiops khiops && \
-    mamba clean --all -f -y
-
-# To activate this environment by default in the Jupyter Notebook
-USER root
-RUN activate_custom_env_script=/usr/local/bin/before-notebook.d/activate_custom_env.sh && \
-    echo "#!/bin/bash" > ${activate_custom_env_script} && \
-    echo "eval \"$(conda shell.bash activate "${env_name}")\"" >> ${activate_custom_env_script} && \
-    chmod +x ${activate_custom_env_script}
-
-# Switch back to notebook user
-USER ${NB_UID}
-
-# To set this environment as the default in the terminal
-RUN echo "conda activate ${env_name}" >> "${HOME}/.bashrc"
