@@ -26,12 +26,10 @@ RUN apt-get update && \
     dpkg -i "khiops-core_${KHIOPS_VERSION}-0+${CODENAME}_amd64.deb" || apt-get -f -y install && \
     rm "khiops-core_${KHIOPS_VERSION}-0+${CODENAME}_amd64.deb" && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir "khiops @ git+https://github.com/khiopsml/khiops-python@v${KHIOPS_PYTHON_VERSION}" && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
 # Switch back to the original user
 USER $NB_UID
-
-# Install Khiops-python using pip
-RUN pip install --no-cache-dir "khiops @ git+https://github.com/khiopsml/khiops-python@v${KHIOPS_PYTHON_VERSION}" && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
