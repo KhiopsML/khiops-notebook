@@ -32,6 +32,6 @@ RUN apt-get update && \
 USER $NB_UID
 
 # Install Khiops-python using pip
-RUN pip install --no-cache-dir 'khiops @ git+https://github.com/khiopsml/khiops-python@v${KHIOPS_PYTHON_VERSION}' && \
+RUN pip install --no-cache-dir "khiops @ git+https://github.com/khiopsml/khiops-python@v${KHIOPS_PYTHON_VERSION}" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
