@@ -22,9 +22,9 @@ ARG KHIOPS_PYTHON_VERSION=10.2.0b2
 RUN apt-get update && \
     apt-get install -y wget && \
     CODENAME=$(sed -rn 's|^deb\s+\S+\s+(\w+)\s+(\w+\s+)?main.*$|\1|p' /etc/apt/sources.list) && \
-    wget "https://github.com/KhiopsML/khiops/releases/download/v${KHIOPS_VERSION}/khiops-core_${KHIOPS_VERSION}-1-${CODENAME}_amd64.deb" && \
-    dpkg -i "khiops-core_${KHIOPS_VERSION}-1-${CODENAME}_amd64.deb" || apt-get -f -y install && \
-    rm "khiops-core_${KHIOPS_VERSION}-1-${CODENAME}_amd64.deb" && \
+    wget "https://github.com/KhiopsML/khiops/releases/download/v${KHIOPS_VERSION}/khiops-core_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" && \
+    dpkg -i "khiops-core_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" || apt-get -f -y install && \
+    rm "khiops-core_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir "git+https://github.com/khiopsml/khiops-python@v${KHIOPS_PYTHON_VERSION}" && \
