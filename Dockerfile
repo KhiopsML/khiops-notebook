@@ -16,7 +16,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Switch to ROOT for installation
 USER root
 ARG KHIOPS_VERSION=10.2.0
-ARG KHIOPS_PYTHON_VERSION=10.2.0b2
+ARG KHIOPS_PYTHON_VERSION=10.2.0.0
 
 # Install Khiops using apt-get
 RUN apt-get update && \
