@@ -29,7 +29,7 @@ RUN apt-get update && \
     rm "khiops-core-openmpi_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install "https://github.com/KhiopsML/khiops-python/releases/download/10.2.0.0/khiops-10.2.0.0.tar.gz" && \
+    pip install "https://github.com/KhiopsML/khiops-python/releases/download/10.2.2.0/khiops-10.2.2.0.tar.gz" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
