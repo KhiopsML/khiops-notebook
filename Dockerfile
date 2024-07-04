@@ -2,8 +2,10 @@
 # Distributed under the terms of the BSD-3-Clause-Clear License.
 
 # ARGs to set default values
+ARG REGISTRY=quay.io
 ARG OWNER=jupyter
-ARG BASE_CONTAINER=$OWNER/scipy-notebook
+ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook
+FROM $BASE_CONTAINER
 
 # Base image (platform is set to amd64 since Khiops is not built yet for ARM)
 FROM --platform=linux/amd64 $BASE_CONTAINER
