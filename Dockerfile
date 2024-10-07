@@ -4,7 +4,8 @@
 # ARGs to set default values
 ARG REGISTRY=quay.io
 ARG OWNER=jupyter
-ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook
+ARG TAG=x86_64-ubuntu-22.04
+ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook:$TAG
 FROM $BASE_CONTAINER
 
 # Base image (platform is set to amd64 since Khiops is not built yet for ARM)
@@ -13,7 +14,7 @@ FROM --platform=linux/amd64 $BASE_CONTAINER
 LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 
 # Fixes for some issues faced during image creation
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+#SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Switch to ROOT for installation
 USER root
@@ -26,9 +27,8 @@ ARG S3_DRIVER_VERSION=0.0.1
 ARG S3_DRIVER_RC_EXT=-rc1
 
 # Install Khiops
-RUN apt-get update && \
-    apt-get install --no-install-recommends ca-certificates curl && \
-    export CODENAME=$(sed -rn 's|^deb\s+\S+\s+(\w+)\s+(\w+\s+)?main.*$|\1|p' /etc/apt/sources.list) && \
+RUN apt-get update && apt-get install -y ca-certificates lsb-release curl && \
+    CODENAME=$(lsb_release -cs) && \
     TEMP_DEB="$(mktemp)" && \
     curl -L "https://github.com/KhiopsML/khiops/releases/download/${KHIOPS_VERSION}/${KHIOPS_CORE_PACKAGE_NAME}_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
     dpkg -i "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
