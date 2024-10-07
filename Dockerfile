@@ -40,7 +40,7 @@ RUN apt-get update && \
     dpkg -i --force-all "$TEMP_DEB" && \
     rm -f $TEMP_DEB && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install "https://github.com/KhiopsML/khiops-python/releases/download/10.2.2.0/khiops-10.2.2.0.tar.gz" && \
+    pip install "https://github.com/KhiopsML/khiops-python/releases/download/${KHIOPS_PYTHON_VERSION}/khiops-${KHIOPS_PYTHON_VERSION}.tar.gz" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
