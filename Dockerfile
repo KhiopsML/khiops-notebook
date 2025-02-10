@@ -21,10 +21,8 @@ USER root
 ARG KHIOPS_CORE_PACKAGE_NAME=khiops-core-openmpi
 ARG KHIOPS_VERSION=10.3.0
 ARG KHIOPS_PYTHON_VERSION=10.3.0.0
-ARG GCS_DRIVER_VERSION=0.0.1
-ARG GCS_DRIVER_RC_EXT=-rc1
-ARG S3_DRIVER_VERSION=0.0.1
-ARG S3_DRIVER_RC_EXT=-rc1
+ARG GCS_DRIVER_VERSION=0.0.11
+ARG S3_DRIVER_VERSION=0.0.13
 
 # Install Khiops
 RUN apt-get update && apt-get install -y ca-certificates lsb-release curl && \
@@ -33,10 +31,10 @@ RUN apt-get update && apt-get install -y ca-certificates lsb-release curl && \
     curl -L "https://github.com/KhiopsML/khiops/releases/download/${KHIOPS_VERSION}/${KHIOPS_CORE_PACKAGE_NAME}_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
     dpkg -i "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
-    curl -L "https://github.com/KhiopsML/khiopsdriver-gcs/releases/download/${GCS_DRIVER_VERSION}${GCS_DRIVER_RC_EXT}/khiops-driver-gcs_0.1.0-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
+    curl -L "https://github.com/KhiopsML/khiopsdriver-gcs/releases/download/${GCS_DRIVER_VERSION}/khiops-driver-gcs_${GCS_DRIVER_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
     dpkg -i --force-all "$TEMP_DEB" && \
     rm -f $TEMP_DEB && \
-    curl -L "https://github.com/KhiopsML/khiopsdriver-s3/releases/download/${S3_DRIVER_VERSION}${S3_DRIVER_RC_EXT}/khiops-driver-s3_0.1.0-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
+    curl -L "https://github.com/KhiopsML/khiopsdriver-s3/releases/download/${S3_DRIVER_VERSION}/khiops-driver-s3_${S3_DRIVER_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
     dpkg -i --force-all "$TEMP_DEB" && \
     rm -f $TEMP_DEB && \
     rm -rf /var/lib/apt/lists/* && \
