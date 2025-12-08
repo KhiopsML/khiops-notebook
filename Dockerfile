@@ -9,7 +9,7 @@ ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook:$TAG
 FROM $BASE_CONTAINER
 
 # Base image (platform is set to amd64 since Khiops is not built yet for ARM)
-FROM --platform=linux/amd64 $BASE_CONTAINER
+FROM $BASE_CONTAINER
 
 LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 
@@ -21,21 +21,23 @@ USER root
 ARG KHIOPS_CORE_PACKAGE_NAME=khiops-core-openmpi
 ARG KHIOPS_VERSION=10.3.2
 ARG KHIOPS_PYTHON_VERSION=10.3.2.1
-ARG GCS_DRIVER_VERSION=0.0.13
-ARG S3_DRIVER_VERSION=0.0.13
+ARG GCS_DRIVER_VERSION=0.0.15
+ARG S3_DRIVER_VERSION=0.0.15
 
 # Install Khiops
-RUN apt-get update && apt-get install -y ca-certificates lsb-release curl && \
-    CODENAME=$(lsb_release -cs) && \
+RUN apt-get update && apt-get install -y ca-certificates curl && \
+    source /etc/os-release && \
+    CODENAME=$VERSION_CODENAME && \
+    BUILDARCH=$(dpkg --print-architecture) && \
     TEMP_DEB="$(mktemp)" && \
-    curl -L "https://github.com/KhiopsML/khiops/releases/download/${KHIOPS_VERSION}/${KHIOPS_CORE_PACKAGE_NAME}_${KHIOPS_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
+    curl -L "https://github.com/KhiopsML/khiops/releases/download/${KHIOPS_VERSION}/${KHIOPS_CORE_PACKAGE_NAME}_${KHIOPS_VERSION}-1-${CODENAME}.${BUILDARCH}.deb" -o "$TEMP_DEB" && \
     dpkg -i "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
-    curl -L "https://github.com/KhiopsML/khiopsdriver-gcs/releases/download/${GCS_DRIVER_VERSION}/khiops-driver-gcs_${GCS_DRIVER_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
-    dpkg -i --force-all "$TEMP_DEB" && \
+    curl -L "https://github.com/KhiopsML/khiopsdriver-gcs/releases/download/${GCS_DRIVER_VERSION}/khiops-driver-gcs_${GCS_DRIVER_VERSION}-1-${CODENAME}.${BUILDARCH}.deb" -o "$TEMP_DEB" && \
+    dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
-    curl -L "https://github.com/KhiopsML/khiopsdriver-s3/releases/download/${S3_DRIVER_VERSION}/khiops-driver-s3_${S3_DRIVER_VERSION}-1-${CODENAME}.amd64.deb" -o "$TEMP_DEB" && \
-    dpkg -i --force-all "$TEMP_DEB" && \
+    curl -L "https://github.com/KhiopsML/khiopsdriver-s3/releases/download/${S3_DRIVER_VERSION}/khiops-driver-s3_${S3_DRIVER_VERSION}-1-${CODENAME}.${BUILDARCH}.deb" -o "$TEMP_DEB" && \
+    dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
     rm -rf /var/lib/apt/lists/* && \
     pip install "https://github.com/KhiopsML/khiops-python/releases/download/${KHIOPS_PYTHON_VERSION}/khiops-${KHIOPS_PYTHON_VERSION}.tar.gz" && \
