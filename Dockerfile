@@ -4,7 +4,7 @@
 # ARGs to set default values
 ARG REGISTRY=quay.io
 ARG OWNER=jupyter
-ARG TAG=x86_64-ubuntu-24.04
+ARG TAG=ubuntu-24.04
 ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook:$TAG
 FROM $BASE_CONTAINER
 
