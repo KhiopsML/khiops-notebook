@@ -97,7 +97,7 @@ jobs:
             ${{ env.LATEST_TAG }}
 
       - name: Build and push - v11beta
-        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        if: github.ref == 'refs/heads/11beta'
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
