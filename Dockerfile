@@ -19,8 +19,9 @@ LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 # Switch to ROOT for installation
 USER root
 ARG KHIOPS_CORE_PACKAGE_NAME=khiops-core-openmpi
-ARG KHIOPS_VERSION=10.3.2
-ARG KHIOPS_PYTHON_VERSION=10.3.2.1
+ARG KHIOPS_VERSION=11.0.0-rc.2
+ARG KHIOPS_PYTHON_VERSION=11.0.0.0rc2
+ARG KHIOPS_PYTHON_VERSION_FOLDER=11.0.0.0-rc.2
 ARG GCS_DRIVER_VERSION=0.0.15
 ARG S3_DRIVER_VERSION=0.0.15
 
@@ -40,7 +41,7 @@ RUN apt-get update && apt-get install -y ca-certificates curl && \
     dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install "https://github.com/KhiopsML/khiops-python/releases/download/${KHIOPS_PYTHON_VERSION}/khiops-${KHIOPS_PYTHON_VERSION}.tar.gz" && \
+    pip install "https://github.com/KhiopsML/khiops-python/releases/download/${KHIOPS_PYTHON_VERSION_FOLDER}/khiops-${KHIOPS_PYTHON_VERSION}.tar.gz" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
