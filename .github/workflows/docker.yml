@@ -56,18 +56,13 @@ jobs:
       - name: Get commit sha, this will be used as a tag later on 🏷
         shell: bash
         run: |
-          echo "sha12=$(echo ${GITHUB_SHA} | cut -c1-12)" >> $GITHUB_OUTPUT
+          sha12=$(echo ${GITHUB_SHA} | cut -c1-12)
+          echo "sha12=$sha12" >> $GITHUB_OUTPUT
+          echo "SHA_TAG=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:$sha12" >> $GITHUB_OUTPUT
+          echo "LATEST_TAG=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
+          echo "TEST_TAG=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test" >> $GITHUB_OUTPUT
+          echo "V11BETA_TAG=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:11beta" >> $GITHUB_OUTPUT
         id: get_sha
-
-      - name: Build image 🛠
-        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} .
-        env:
-          DOCKER_BUILDKIT: 1
-          # Full logs for CI build
-          BUILDKIT_PROGRESS: plain
-
-      - name: Run tests ✅
-        run: python3 -m pytest tests
 
       - name: Login to Docker Hub 🔐
         if: github.ref == 'refs/heads/main'
@@ -76,6 +71,37 @@ jobs:
           username: ${{ env.OWNER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Image to Docker Hub 📤
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v6
+        with:
+          load: true
+          tags: ${{ env.TEST_TAG }}
+
+      - name: Run tests ✅
+        run: python3 -m pytest tests
+
+      - name: Build and push
         if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-        run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.SHA_TAG }}
+            ${{ env.LATEST_TAG }}
+
+      - name: Build and push - v11beta
+        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.SHA_TAG }}
+            ${{ env.V11BETA_TAG }}
