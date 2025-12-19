@@ -4,7 +4,7 @@
 # ARGs to set default values
 ARG REGISTRY=quay.io
 ARG OWNER=jupyter
-ARG TAG=x86_64-ubuntu-24.04
+ARG TAG=ubuntu-24.04
 ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook:$TAG
 FROM $BASE_CONTAINER
 
@@ -19,8 +19,8 @@ LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 # Switch to ROOT for installation
 USER root
 ARG KHIOPS_CORE_PACKAGE_NAME=khiops-core-openmpi
-ARG KHIOPS_VERSION=10.3.2
-ARG KHIOPS_PYTHON_VERSION=10.3.2.1
+ARG KHIOPS_VERSION=11.0.0
+ARG KHIOPS_PYTHON_VERSION=11.0.0.0
 ARG GCS_DRIVER_VERSION=0.0.15
 ARG S3_DRIVER_VERSION=0.0.15
 
