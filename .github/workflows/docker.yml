@@ -19,6 +19,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - '*'
     paths:
       - ".github/workflows/docker.yml"
       - "image/**"
@@ -81,6 +83,23 @@ jobs:
           username: ${{ env.OWNER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            # Full version e.g. 10.3.2.0
+            type=match,pattern=^\d+.\d+.\d+.\d+
+            # Short version e.g. 10
+            type=match,pattern=^(\d+).\d+.\d+.\d+,group=1
+            type=sha
+            # set latest tag for default branch
+            type=raw,value=latest,enable={{is_default_branch}}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -102,9 +121,8 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            ${{ env.SHA_TAG }}
-            ${{ env.LATEST_TAG }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push - v11beta
         if: github.ref == 'refs/heads/11beta'
