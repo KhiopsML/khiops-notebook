@@ -87,6 +87,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
+          images: KhiopsML/khiops-notebook
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -116,7 +117,7 @@ jobs:
         run: python3 -m pytest tests
 
       - name: Build and push
-        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule' || contains(github.ref, 'refs/tags')
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
