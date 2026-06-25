@@ -19,10 +19,11 @@ LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 # Switch to ROOT for installation
 USER root
 ARG KHIOPS_CORE_PACKAGE_NAME=khiops-core-openmpi
-ARG KHIOPS_VERSION=11.0.0
-ARG KHIOPS_PYTHON_VERSION=11.0.0.3
-ARG GCS_DRIVER_VERSION=0.0.15
-ARG S3_DRIVER_VERSION=0.0.15
+ARG KHIOPS_VERSION=11.0.1-rc.2
+ARG KHIOPS_PYTHON_VERSION=11.0.1.0-rc.2
+ARG GCS_DRIVER_VERSION=0.0.23
+ARG S3_DRIVER_VERSION=0.0.25
+ARG AZURE_DRIVER_VERSION=0.0.18
 
 # Install Khiops
 RUN apt-get update && apt-get install -y ca-certificates curl && \
@@ -37,6 +38,9 @@ RUN apt-get update && apt-get install -y ca-certificates curl && \
     dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
     curl -L "https://github.com/KhiopsML/khiopsdriver-s3/releases/download/${S3_DRIVER_VERSION}/khiops-driver-s3_${S3_DRIVER_VERSION}-1-${CODENAME}.${BUILDARCH}.deb" -o "$TEMP_DEB" && \
+    dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
+    rm -f $TEMP_DEB && \
+    wget "https://github.com/KhiopsML/khiopsdriver-azure/releases/download/${AZURE_DRIVER_VERSION}/khiops-driver-azure_${AZURE_DRIVER_VERSION}-1-${CODENAME}.${BUILDARCH}.deb" -O "$TEMP_DEB" && \
     dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
     rm -rf /var/lib/apt/lists/* && \
