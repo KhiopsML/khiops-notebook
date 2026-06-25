@@ -44,7 +44,8 @@ RUN apt-get update && apt-get install -y ca-certificates curl && \
     dpkg -i --force-all "$TEMP_DEB" || apt-get -f -y install --no-install-recommends && \
     rm -f $TEMP_DEB && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install "https://github.com/KhiopsML/khiops-python/releases/download/${KHIOPS_PYTHON_VERSION}/khiops-${KHIOPS_PYTHON_VERSION}.tar.gz" && \
+    hyphen_free_version="${KHIOPS_PYTHON_VERSION//-/}" && \
+    pip install "https://github.com/KhiopsML/khiops-python/releases/download/${KHIOPS_PYTHON_VERSION}/khiops-${hyphen_free_version}.tar.gz" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
