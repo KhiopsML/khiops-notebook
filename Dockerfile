@@ -8,22 +8,30 @@ ARG TAG=ubuntu-24.04
 ARG BASE_CONTAINER=$REGISTRY/$OWNER/scipy-notebook:$TAG
 FROM $BASE_CONTAINER
 
-# Base image (platform is set to amd64 since Khiops is not built yet for ARM)
-FROM $BASE_CONTAINER
-
 LABEL maintainer="Khiops Team <khiops.team@orange.com>"
-
-# Fixes for some issues faced during image creation
-#SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Switch to ROOT for installation
 USER root
-ARG KHIOPS_PYTHON_VERSION=11.0.1.0-rc.2
+
+# Version of the Khiops Python library Pip package on the PyPI or Test PyPI repositories
+# this version can be either official, following this pattern : [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+
+# or pre-release (alpha, beta, release candidate), following this other pattern : [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(rc|a|b)[0-9]+
+ARG KHIOPS_PYTHON_VERSION=11.0.1.0
 
 # Install Khiops, Khiops Library and all the remote drivers
-RUN apt-get update && apt-get install -y ca-certificates curl && \
-    artifact_rc_version_transformation="${KHIOPS_PYTHON_VERSION/-rc./rc}" && \
-    pip install --extra-index-url https://test.pypi.org/simple khiops[s3,gcs,azure]==${artifact_rc_version_transformation} && \
+RUN apt-get update && apt-get install -y ca-certificates curl &&  \
+    if [[ "$KHIOPS_PYTHON_VERSION" =~ ^[0-9\.]+$ ]]; then \
+      # The library has an official version \
+      NEED_EXTRA_INDEX_URL=""; \
+    else \
+      # The library has a pre-release version \
+      NEED_EXTRA_INDEX_URL="--extra-index-url https://test.pypi.org/simple"; \
+    fi && \
+    pip install ${NEED_EXTRA_INDEX_URL} khiops[s3,gcs,azure]==${KHIOPS_PYTHON_VERSION} && \
+    # Make the following directories (human) user-writable so that : \
+    # - the user can install extra Python packages in the system-wide Python environment based on Conda (inherited from the upstream Docker image) \
+    # - the user can save his personal files and notebooks in his home \
+    fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
 # Switch back to the original user
