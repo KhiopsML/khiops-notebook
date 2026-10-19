@@ -16,7 +16,7 @@ USER root
 # Version of the Khiops Python library Pip package on the PyPI or Test PyPI repositories
 # this version can be either official, following this pattern : [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+
 # or pre-release (alpha, beta, release candidate), following this other pattern : [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(rc|a|b)[0-9]+
-ARG KHIOPS_PYTHON_VERSION=11.0.1.0
+ARG KHIOPS_PYTHON_VERSION=11.0.1.1
 
 # Install Khiops, Khiops Library and all the remote drivers
 RUN apt-get update && apt-get install -y ca-certificates curl &&  \
